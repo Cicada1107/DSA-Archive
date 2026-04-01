@@ -9,12 +9,14 @@ public:
         vector<int> dp(n+1, INT_MAX);
         dp[0] = INT_MIN;
         for(int i=0; i<n; i++){
-            for(int l=1; l<n+1; l++){
-                if(dp[l-1] < a[i] && a[i] < dp[l]){
-                    dp[l] = a[i];
-                }
+            int l = upper_bound(dp.begin(), dp.end(), a[i]) - dp.begin();
+            if(dp[l-1]<a[i]){
+                dp[l] = a[i];
             }
         }
+
+        //debug
+        // for(auto &it:dp) cout<<it<<" ";
 
         
 
