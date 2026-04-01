@@ -1,4 +1,4 @@
-// nlog n approach
+// nlog n approach - even more optimized - just removing the if condition by using lower_bound
 
 #define ll long long
 
@@ -9,10 +9,8 @@ public:
         vector<int> dp(n+1, INT_MAX);
         dp[0] = INT_MIN;
         for(int i=0; i<n; i++){
-            int l = upper_bound(dp.begin(), dp.end(), a[i]) - dp.begin();
-            if(dp[l-1]<a[i]){
-                dp[l] = a[i];
-            }
+            int l = lower_bound(dp.begin(), dp.end(), a[i]) - dp.begin();
+            dp[l] = a[i];
         }
 
         //debug
