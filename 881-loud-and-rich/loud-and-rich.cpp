@@ -16,7 +16,7 @@ public:
 
         queue<int> q;
         for(int node=0; node<n; node++){
-            if(inDegree[node] == 0) q.push(node);
+            if(!inDegree[node]) q.push(node);
         }
 
         while(!q.empty()){
