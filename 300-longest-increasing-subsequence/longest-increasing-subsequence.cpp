@@ -1,31 +1,19 @@
-// nlog n approach - even more optimized - just removing the if condition by using lower_bound
-
-#define ll long long
+// binary search
 
 class Solution {
 public:
-    int lengthOfLIS(vector<int>& a) {
-        int n = a.size();
-        vector<int> dp(n+1, INT_MAX);
-        dp[0] = INT_MIN;
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> tails;
+
         for(int i=0; i<n; i++){
-            int l = lower_bound(dp.begin(), dp.end(), a[i]) - dp.begin();
-            dp[l] = a[i];
+            auto it = lower_bound(tails.begin(), tails.end(), nums[i]);
+            if(it != tails.end()){
+                int j = it - tails.begin();
+                tails[j] = nums[i];
+            }else tails.push_back(nums[i]);
         }
 
-        //debug
-        // for(auto &it:dp) cout<<it<<" ";
-
-        
-
-        int ans = 0;
-        for(int l=0; l<n+1; l++){
-            if(dp[l] == INT_MAX) continue;
-            if(dp[ans] < dp[l]){
-                ans = l;
-            }
-        }
-
-        return ans;
+        return tails.size();
     }
 };
