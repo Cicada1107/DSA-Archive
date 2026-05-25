@@ -10,26 +10,17 @@ func flatten(root *TreeNode)  {
     if root == nil {
         return
     }
-
-    var nodes []*TreeNode
-
-    var dfs func(node *TreeNode)
-
-    dfs = func (node *TreeNode) {
-        if node == nil {
-            return
+    curr := root
+    for curr != nil {
+        if curr.Left != nil {
+            p := curr.Left
+            for p.Right != nil {
+                p = p.Right
+            }
+            p.Right = curr.Right
+            curr.Right = curr.Left
+            curr.Left = nil
         }
-
-        nodes = append(nodes, node)
-        dfs(node.Left)
-        dfs(node.Right)
+        curr = curr.Right
     }
-
-    dfs(root)
-
-    for i:=0; i<len(nodes)-1; i++ {
-        nodes[i].Right = nodes[i+1]
-        nodes[i].Left = nil
-    }
-
 }
