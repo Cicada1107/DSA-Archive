@@ -9,18 +9,19 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
 class Solution {
 private:
-    int ans = -1e9;
+    int ans = INT_MIN;
 
     int dfs(TreeNode* node){
         if(!node) return 0;
 
-        int l = max(0, dfs(node->left));
-        int r = max(0, dfs(node->right));
+        int left_sum = max(0, dfs(node->left));
+        int right_sum = max(0, dfs(node->right));
+        ans = max(ans, left_sum + node->val + right_sum);
 
-        ans = max(ans, node->val+l+r);
-        return max(l, r) + node->val;
+        return node->val + max(left_sum, right_sum);
     }
 
 public:
