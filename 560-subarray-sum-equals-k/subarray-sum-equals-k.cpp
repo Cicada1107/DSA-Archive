@@ -4,23 +4,21 @@ class Solution {
 public:
     int subarraySum(vector<int>& nums, int k) {
         int n = nums.size();
-        
-        // vector<ll> pref(n, nums[0]);
-        ll curr_sum = 0;
-        unordered_map<ll, int> hash;
-        // hash[arr[0]] = 1;
-        // int cnt = (arr[0] == k ? 1 : 0);
-        int cnt = 0;
-        
-        for(int i=0; i<n; i++){
-            curr_sum += nums[i];
-            if(hash.find(curr_sum - k) != hash.end()) cnt += hash[curr_sum - k];
-            hash[curr_sum]++;
-        }
-        if(hash.find(k) != hash.end()) cnt += hash[k];
 
-        for(auto it: hash){
-            cout<<it.first<<" "<<it.second<<endl;
+        vector<int> pref(n, 0);
+        pref[0] = nums[0];
+        for(int i=1; i<n; i++){
+            pref[i] = pref[i-1]+nums[i];
+        }
+
+        int cnt = 0;
+        unordered_map<int, int> hash;
+        hash[0] = 1;
+        for(int i=0; i<n; i++){
+            if(hash.find(pref[i] - k) != hash.end()){
+                cnt += hash[pref[i] - k];
+            }
+            hash[pref[i]]++;
         }
 
         return cnt;
