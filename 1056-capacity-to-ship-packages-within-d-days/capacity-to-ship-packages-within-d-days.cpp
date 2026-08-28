@@ -2,37 +2,44 @@
 
 class Solution {
 private:
-    bool canShip(vector<int> &weights, int &days, ll cap){
-        ll cnt = 1, curr = 0;
-        for(int i=0; i<weights.size(); i++){
-            if(weights[i] > cap) return false;
-            if(curr + weights[i] <= cap){
-                curr += weights[i];
-            }else{
+    vector<int> weights;
+    int days;
+
+    bool canShip(int k){
+        int cnt = 1, n = weights.size();
+        ll curr_sum = 0;
+
+        for(int i=0; i<n; i++){
+            if(curr_sum + weights[i] <= k){
+                curr_sum += weights[i];
+            }
+            else if(k < weights[i]) return false;
+            else{
                 cnt++;
-                curr = weights[i];
+                curr_sum = weights[i];
             }
         }
 
-        return (cnt <= (ll)days);
+        return cnt <= days;
     }
 
 public:
     int shipWithinDays(vector<int>& weights, int days) {
+        this->weights = weights;
+        this->days = days;
+        
+        // bs on answer bro
+        ll ans;
         ll l = 0, r = accumulate(weights.begin(), weights.end(), 0LL);
-
-        int n  = weights.size();
-        ll ans = 0;
-        while(l <= r){
+        while(l <=  r){
             ll mid = l + (r-l)/2;
-            if(canShip(weights, days, mid)){
+
+            if(canShip(mid)){
                 ans = mid;
                 r = mid-1;
             }else{
                 l = mid+1;
             }
-
-            cout<<mid<<" "<<canShip(weights, days, mid)<<endl;
         }
 
         return ans;
