@@ -9,14 +9,18 @@
 class Solution {
 public:
     bool hasCycle(ListNode *head) {
-        if(head == nullptr || head->next == nullptr) return false;
-        ListNode* curr = head;
-        ListNode* aux = head->next;
-        while(aux != nullptr && aux->next != nullptr){
-            if(curr == aux) return true;
-            curr = curr->next;
-            aux = aux->next->next;
+        if(!head || !head->next) return false;
+        
+        ListNode* tortoise = head;
+        ListNode* hare = head->next;
+
+        while(hare && tortoise){
+            if(tortoise == hare) return true;
+            tortoise = tortoise->next;
+            if(hare->next) hare = hare->next->next;
+            else return false;
         }
+
         return false;
     }
 };
