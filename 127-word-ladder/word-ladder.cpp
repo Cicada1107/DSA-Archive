@@ -1,30 +1,24 @@
 class Solution {
 private:
-    int diff(int i, int j, vector<string> &wordList){
-        if(i == j) return 0;
+    int dist(string &u, string &v){
         int cnt = 0;
-        for(int x=0; x<wordList[i].size(); x++){
-            if(wordList[i][x] != wordList[j][x]) cnt++;
+        for(int i=0; i<u.length(); i++){
+            if(u[i] != v[i]) cnt++;
         }
+
         return cnt;
     }
 
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        bool found = false;
-        for(auto &word: wordList) if(word == endWord) found = true;
-        if(!found) return 0;
-
         wordList.push_back(beginWord);
         int n = wordList.size();
+        unordered_map<string, vector<string>> graph(n);
 
-        // create a graph, each word represents a node, edge between two nodes only if a single char difference, find shortest path in this undirected graph uisng BFS.
-
-        unordered_map<string, vector<string>> graph;
         for(int i=0; i<n; i++){
             for(int j=i+1; j<n; j++){
-                if(diff(i, j, wordList) == 1){
-                    string u = wordList[i], v = wordList[j];
+                string u = wordList[i], v = wordList[j];
+                if(dist(u, v) == 1){
                     graph[u].push_back(v);
                     graph[v].push_back(u);
                 }
@@ -32,17 +26,20 @@ public:
         }
 
         queue<pair<string, int>> q;
-        unordered_map<string, bool> vis;
-        q.push({beginWord, 0});
-        vis[beginWord] = true;
+        q.push({beginWord, 1});
+        set<string> visited;
+
         while(!q.empty()){
-            auto [node, d] = q.front();
+            auto [node, depth] = q.front();
             q.pop();
-            if(node == endWord) return d+1;
-            for(string &neigh: graph[node]){
-                if(vis.count(neigh)) continue;
-                vis[neigh] = true;
-                q.push({neigh, d+1});
+
+            if(node == endWord) return depth;
+
+            for(auto &neighbour: graph[node]){
+                if(visited.find(neighbour) == visited.end()){
+                    visited.insert(neighbour);
+                    q.push({neighbour, depth+1});
+                }
             }
         }
 
